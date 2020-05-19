@@ -36,10 +36,10 @@ const InputField = () => {
       ),
     [],
   );
-  // useEffect(() => {
-  //   const {x, y} = inputField.current.getBoundingClientRect();
-  //   setPositionXY({x, y});
-  // });
+  useEffect(() => {
+    const {x, y} = inputField.current.getBoundingClientRect();
+    setPositionXY({x, y});
+  });
   useEffect(() => {
     const inputEvent = EventObservable(inputField.current).subscribe(async (inputValue) => {
       // setPositionXY({...positionXY, x: inputValue.position});
@@ -65,9 +65,14 @@ const InputField = () => {
           value={text}
           ref={inputField}
         ></textarea>
-        <span class="text-white bg-gray-600" style={{position: 'absolute', left: positionXY.x + 95, top: positionXY.y}}>
-          {recom}
-        </span>
+        {recom !== '' && (
+          <span
+            class="text-gray-600 bg-gray-100  px-2 rounded-full"
+            style={{position: 'absolute', left: positionXY.x + 95, top: positionXY.y}}
+          >
+            {recom} ⨉
+          </span>
+        )}
       </div>
     </Fragment>
   );
