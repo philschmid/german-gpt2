@@ -15,8 +15,6 @@ const InputField = () => {
     (event: any) => {
       if (event.ctrlKey && event.keyCode === 32) {
         setText(recom);
-
-        setPositionXY({...positionXY, x: positionXY + 100});
       }
       // key == 'Tab' && setText(recom);
       // Update coordinates
