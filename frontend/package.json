@@ -1,0 +1,40 @@
+{
+  "name": "preact-typescript-web-component",
+  "version": "1.0.0",
+  "main": "index.js",
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
+  "author": {
+    "name": "Philipp Schmid"
+  },
+  "repository": "https://github.com/PhilippSchmidCoC/preact-typescript-web-component.git",
+  "license": "MIT",
+  "scripts": {
+    "start": "rm -rf .cache && rm -rf dist && parcel src/index.html --target browser --open",
+    "build": "rm -rf .cache && rm -rf dist && parcel build src/index.html --target browser --public-url './'",
+    "serve": "serve dist -p 5000",
+    "e2e": "cypress open",
+    "test": "CYPRESS_INTEGRATION_FOLDER='./' cypress run --spec src/components/**/**/*.spec.ts"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.2.0",
+    "autoprefixer": "^9.7.6",
+    "cssnano": "^4.1.10",
+    "cypress": "^4.5.0",
+    "http-server": "^0.12.3",
+    "parcel-bundler": "^1.12.4",
+    "postcss-custom-properties": "^9.1.1",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-modules": "^2.0.0",
+    "postcss-nested": "^4.2.1",
+    "preact-custom-element": "^3.0.0",
+    "serve": "^11.3.0",
+    "tailwindcss": "^1.4.6",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "preact": "^10.4.1",
+    "rxjs": "^6.5.5"
+  }
+}
