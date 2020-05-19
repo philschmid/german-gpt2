@@ -38,10 +38,10 @@ const InputField = () => {
       ),
     [],
   );
-  useEffect(() => {
-    const {x, y} = inputField.current.getBoundingClientRect();
-    setPositionXY({x, y});
-  });
+  // useEffect(() => {
+  //   const {x, y} = inputField.current.getBoundingClientRect();
+  //   setPositionXY({x, y});
+  // });
   useEffect(() => {
     const inputEvent = EventObservable(inputField.current).subscribe(async (inputValue) => {
       // setPositionXY({...positionXY, x: inputValue.position});
