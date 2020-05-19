@@ -1,0 +1,8 @@
+.vscode
+.pytest*
+__pycache__
+*.__pycache__
+*.tar.gz
+model.pt
+params.json
+sp.model
