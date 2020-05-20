@@ -5,17 +5,20 @@ import {fromEvent} from 'rxjs';
 import {map, skipWhile, debounceTime} from 'rxjs/operators';
 import {post} from '../../utils/post';
 import {useEventListener} from '../../utils/useEventListener';
+
 const InputField = () => {
-  const [text, setText] = useState('Sehr geehrte');
+  const [text, setText] = useState('');
   const [recom, setRecom] = useState('');
-  const [positionXY, setPositionXY]: any = useState({});
   const inputField = useRef<any>(null);
 
   const handler = useCallback(
     (event: any) => {
-      if (event.ctrlKey && event.keyCode === 32) {
-        setText(recom);
+      // console.log(event);
+      if (event.ctrlKey) {
+        inputField.current.textContent = inputField.current.textContent;
+        setCaret();
       }
+      setRecom('');
       // key == 'Tab' && setText(recom);
       // Update coordinates
     },
@@ -29,24 +32,30 @@ const InputField = () => {
       fromEvent(ref, 'input').pipe(
         debounceTime(500),
         // extract value from event input
-        map((val: any) => {
-          return {value: val.srcElement.value as string, position: val.srcElement.selectionStart};
-        }),
-        // skipWhile((element: any) => element.value.slice(-1) !== ' '),
+        map((val: any) => val.srcElement.innerHTML),
+        skipWhile((value: any) => value.slice(-1) === '&nbsp;'),
+        map((val: any) => val.replace('&nbsp;', ' ')),
       ),
     [],
   );
-  // useEffect(() => {
-  //   const {x, y} = inputField.current.getBoundingClientRect();
-  //   setPositionXY({x, y});
-  // });
+  const setCaret = () => {
+    const el: any = document.getElementById('edit');
+    const range: any = document.createRange();
+    const sel: any = window.getSelection();
+    console.log(el.childNodes);
+    range.setStart(el.childNodes[0], el.childNodes[el.childNodes.length - 1].wholeText.length);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    el.focus();
+  };
 
   useEffect(() => {
-    const inputEvent = EventObservable(inputField.current).subscribe(async (inputValue) => {
-      // setPositionXY({...positionXY, x: inputValue.position});
-      const response = await post('http://localhost:8080/predict', {text: inputValue.value});
-      setText(inputValue.value);
-      setRecom(response.text);
+    const inputEvent = EventObservable(inputField.current).subscribe(async (inputValue: any) => {
+      // setText(inputValue);
+      const response = await post('http://localhost:8080/predict', {text: inputValue});
+      // const response = {text: 'Damen und Herren'};
+      setRecom(response.text.replace(inputValue, ''));
     });
 
     return () => {
@@ -60,20 +69,16 @@ const InputField = () => {
         <h2>
           Press <code>ctrl+space</code> to accept autosuggest
         </h2>
-        <textarea
-          rows={10}
-          class="bg-gray-200	block w-full pl-7 pr-12 sm:text-sm sm:leading-5"
-          value={text}
+        <div
+          id="edit"
+          //@ts-ignore
+          contenteditable={'true'}
+          class="bg-gray-200	block w-full pl-7 pr-12 sm:text-sm sm:leading-5 h-16"
           ref={inputField}
-        ></textarea>
-        {recom !== '' && (
-          <span
-            class="text-gray-600 bg-gray-100  px-2 rounded-full"
-            style={{position: 'absolute', left: positionXY.x + 95, top: positionXY.y}}
-          >
-            {recom} ⨉
-          </span>
-        )}
+        >
+          {text}
+          {recom !== '' && <span class="text-gray-600">{recom}</span>}
+        </div>
       </div>
     </Fragment>
   );
