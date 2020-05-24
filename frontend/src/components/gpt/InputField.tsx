@@ -84,4 +84,4 @@ const InputField = () => {
   );
 };
 
-register(InputField, 'x-input');
+register(InputField, 'x-gpt');
